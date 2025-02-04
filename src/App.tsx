@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { Button } from "./components/button";
+import { useFetch } from "./hooks";
 
+const url = "";
+
+interface Data{
+  name:string;
+  lastName:string;
+  age:number;
+}
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const { data, error, loading } = useFetch<Data>(url);
 
+  if (loading) {
+    return <div>Cargando</div>;
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  const countMore = () => {
+    setCount((count) => count + 1);
+  };
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>{JSON.stringify(data)}</div>
+      <Button label={`El valor es ${count} `} onCLick={countMore}></Button>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
